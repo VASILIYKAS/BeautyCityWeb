@@ -30,9 +30,27 @@ class Master(models.Model):
 		verbose_name='Фото мастера',
 	)
 
-	def __str__(self):
-		return f'{self.first_name} {self.last_name} ({self.get_speciality_display()})'
-
 	class Meta:
 		verbose_name = 'Мастера'
 		verbose_name_plural = 'Мастера'
+
+	def __str__(self):
+		return f'{self.first_name} {self.last_name} ({self.get_speciality_display()})'
+
+
+class Salon(models.Model):
+	name = models.CharField(max_length=100, verbose_name='Название салона')
+	address = models.CharField(max_length=200, verbose_name='Адрес салона')
+	image = models.ImageField(
+		upload_to='salons/',
+		null=True,
+		blank=True,
+		verbose_name='Фото салона',
+	)
+
+	class Meta:
+		verbose_name = 'Салон'
+		verbose_name_plural = 'Салоны'
+
+	def __str__(self):
+		return f'{self.name}'
