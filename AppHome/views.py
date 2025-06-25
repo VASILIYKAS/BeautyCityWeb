@@ -6,16 +6,16 @@ def index(request):
 
 
 def notes(request):
-    return render(request, 'notes.html')
+	return render(request, 'notes.html')
 
 
 def popup(request):
-    return render(request, 'popup.html')
+	return render(request, 'popup.html')
 
 
 def service(request):
-    return render(request, 'service.html')
+	return render(request, 'service.html')
 
 
 def service_finally(request):
-    return render(request, 'serviceFinally.html')
+	return render(request, 'serviceFinally.html')
