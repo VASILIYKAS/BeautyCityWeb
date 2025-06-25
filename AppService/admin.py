@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Master, Salon
+from .models import Master, Salon, Service
 
 
 @admin.register(Master)
@@ -11,3 +11,9 @@ class MasterAdmin(admin.ModelAdmin):
 @admin.register(Salon)
 class SalonAdmin(admin.ModelAdmin):
 	list_display = ('name', 'address')
+
+
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+	list_display = ('name', 'price',)
+	list_filter = ('name',)
