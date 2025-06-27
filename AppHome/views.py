@@ -34,3 +34,6 @@ def register(request):
 		form = ClientRegistrationForm()
 
 	return render(request, 'registration/register.html', {'form': form})
+
+def privacy_policy_view(request):
+    return render(request, 'privacy_policy.html')
