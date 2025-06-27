@@ -35,13 +35,17 @@ def service_finally(request):
 
 
 def register(request):
-    if request.method == 'POST':
-        form = ClientRegistrationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('home')
-    else:
-        form = ClientRegistrationForm()
+	if request.method == 'POST':
+		form = ClientRegistrationForm(request.POST)
+		if form.is_valid():
+			user = form.save()
+			login(request, user)
+			return redirect('home')
+	else:
+		form = ClientRegistrationForm()
 
-    return render(request, 'registration/register.html', {'form': form})
+	return render(request, 'registration/register.html', {'form': form})
+
+def privacy_policy_view(request):
+	return render(request, 'privacy_policy.html')
+
