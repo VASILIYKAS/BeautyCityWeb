@@ -353,8 +353,8 @@ padding: 15px;
 .masters__header_img {
 	width: 57px;
     height: 57px;
-    object-fit: cover; /* сохраняет пропорции и обрезает изображение */
-    border-radius: 50%; /* делает изображение круглым */
+    object-fit: cover;
+    border-radius: 50%;
     margin-right: 10px;
 }
 .masters__header_name {
