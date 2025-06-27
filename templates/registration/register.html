@@ -1,0 +1,39 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <style>
+        .errorlist {
+            color: red;
+            list-style-type: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+        .errorlist li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+     <div class="container">
+        <h1>Зарегистрироваться</h1>
+        <form method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {{ form.as_p }}
+            <button type="submit">Зарегистрироваться</button>
+        </form>
+        <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+    </div>
+</body>
+</html>

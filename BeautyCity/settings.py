@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'AppHome',
     'AppService',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
