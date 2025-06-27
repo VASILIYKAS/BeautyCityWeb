@@ -36,4 +36,5 @@ def register(request):
 	return render(request, 'registration/register.html', {'form': form})
 
 def privacy_policy_view(request):
-    return render(request, 'privacy_policy.html')
+	return render(request, 'privacy_policy.html')
+
