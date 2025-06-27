@@ -1,12 +1,17 @@
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
-from AppService.models import Salon
+from AppService.models import Salon, Service
 from AppHome.forms import ClientRegistrationForm
 
 
 def index(request):
     salons = Salon.objects.all()
-    context = {'salons': salons}
+    services = Service.objects.all()
+
+    context = {
+        'salons': salons,
+        'services': services,
+    }
 
     return render(request, 'index.html', context)
 
