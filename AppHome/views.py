@@ -6,34 +6,35 @@ from AppHome.forms import ClientRegistrationForm
 
 
 def index(request):
-	salons = Salon.objects.all()
-	context = {'salons': salons}
-	return render(request, 'index.html', context)
+    salons = Salon.objects.all()
+    context = {'salons': salons}
+    return render(request, 'index.html', context)
 
 
 def notes(request):
-	return render(request, 'notes.html')
+    return render(request, 'notes.html')
 
 
 def popup(request):
-	return render(request, 'popup.html')
+    return render(request, 'popup.html')
 
 
 def service(request):
-	return render(request, 'service.html')
+    return render(request, 'service.html')
 
 
 def service_finally(request):
-	return render(request, 'serviceFinally.html')
+    return render(request, 'serviceFinally.html')
+
 
 def register(request):
-	if request.method == 'POST':
-		form = ClientRegistrationForm(request.POST)
-		if form.is_valid():
-			user = form.save()
-			login(request, user)
-			return redirect('home')
-	else:
-		form = ClientRegistrationForm()
+    if request.method == 'POST':
+        form = ClientRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = ClientRegistrationForm()
 
-	return render(request, 'registration/register.html', {'form': form})
+    return render(request, 'registration/register.html', {'form': form})
