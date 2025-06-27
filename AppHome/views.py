@@ -1,27 +1,38 @@
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
-
+from AppService.models import Salon, Service, Master
 from AppHome.forms import ClientRegistrationForm
 
 
 def index(request):
-	return render(request, 'index.html')
+    salons = Salon.objects.all()
+    services = Service.objects.all()
+    masters = Master.objects.all()
+
+    context = {
+        'salons': salons,
+        'services': services,
+        'masters': masters,
+    }
+
+    return render(request, 'index.html', context)
 
 
 def notes(request):
-	return render(request, 'notes.html')
+    return render(request, 'notes.html')
 
 
 def popup(request):
-	return render(request, 'popup.html')
+    return render(request, 'popup.html')
 
 
 def service(request):
-	return render(request, 'service.html')
+    return render(request, 'service.html')
 
 
 def service_finally(request):
-	return render(request, 'serviceFinally.html')
+    return render(request, 'serviceFinally.html')
+
 
 def register(request):
 	if request.method == 'POST':
