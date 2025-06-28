@@ -110,7 +110,7 @@
 									довольных клиентов
 								</p>
 							</div>
-							<a href="service.html"><button class="banner__btn">Записаться</button></a>
+							<a href="service"><button class="banner__btn">Записаться</button></a>
 						</div>
 					</div>
 					<div class="col-md-12 col-lg-5">
@@ -558,7 +558,9 @@
 				</div>
 				<div class="contacts__form_checkboxBlock fic">
 					<input type="checkbox" class="contacts__form_checkbox" checked="">
-					<span class="contacts__form_checkboxBlock__intro">Я согласен(а) с политикой конфидециоальности</span>
+					<span class="contacts__form_checkboxBlock__intro">
+						Я согласен(а) с <a href="{% url 'privacy_policy' %}" target="_blank"> политикой конфидециоальности</a>
+					</span>
 				</div>
 				<button type="submit" class="popup__btn authPopup__btn">Отправить</button>
 			</form>
