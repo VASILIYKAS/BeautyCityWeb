@@ -1,6 +1,7 @@
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
 from AppService.models import Salon, Service, Master
+from AppHome.models import Feedback
 from AppHome.forms import ClientRegistrationForm
 
 
@@ -8,11 +9,12 @@ def index(request):
     salons = Salon.objects.all()
     services = Service.objects.all()
     masters = Master.objects.all()
-
+    feedbacks = Feedback.objects.all()
     context = {
         'salons': salons,
         'services': services,
         'masters': masters,
+        'feedbacks': feedbacks
     }
 
     return render(request, 'index.html', context)
