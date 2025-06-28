@@ -26,10 +26,6 @@ def popup(request):
     return render(request, 'popup.html')
 
 
-def service(request):
-    return render(request, 'service.html')
-
-
 def service_finally(request):
     return render(request, 'serviceFinally.html')
 
