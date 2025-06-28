@@ -150,6 +150,24 @@
 						</div>
 					</div>
 					{% endfor %}
+
+					{% with salons_count=salons|length %}
+						{% if salons_count < 4 %}
+							{% for salon in "salons" %}
+								{% if forloop.counter0|add:salons_count < 4 %}
+									<div class="col-6 col-md-4 col-lg-4 col-xl-3 decVis">
+										<div class="salons__block">
+											<img src="img/salons/salon1.svg" alt="salon" class="salons__block_img">
+											<div class="salons__elems">
+												<div class="salons__elems_title">BeautyCity Красная</div>
+												<div class="salons__elems_light">г. Москва, ул. Красная, д. 10</div>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							{% endfor %}
+						{% endif %}
+					{% endwith %}
 				</div>
 			</div>
 		</div>
@@ -185,6 +203,24 @@
 						</div>
 					</div>
 					{% endfor %}
+
+					{% with services_count=services|length %}
+						{% if services_count < 4 %}
+							{% for service in "services" %}
+								{% if forloop.counter0|add:services_count < 4 %}
+									<div class="col-md-3 decVis">
+										<div class="cardBlock services__block">
+											<img src="img/services/service1.svg" alt="service" class="services__block_img">
+											<div class="services__elems">
+												<div class="services__elems_title">Дневной макияж</div>
+												<div class="services__elems_light">1 400 ₽</div>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							{% endfor %}
+						{% endif %}
+					{% endwith %}
 				</div>
 			</div>
 		</div>
@@ -234,6 +270,38 @@
 						</div>
 					</div>
 					{% endfor %}
+
+					{% with masters_count=masters|length %}
+						{% if masters_count < 4 %}
+							{% for master in "masters" %}
+								{% if forloop.counter0|add:masters_count < 4 %}
+									<div class="col-md-3 decVis">
+										<div class="cardBlock masters__block">
+											<div class="masters__header fic">
+												<img src="img/masters/master1.svg" alt="master" class="masters__header_img">
+												<div class="masters__header_elmes">
+													<div class="masters__header_name">Елизавета Лапина</div>
+													<img src="img/rating.svg" alt="rating" class="masters__header_rating">
+													<div class="masters__header_reviews">24 отзыва</div>
+												</div>
+											</div>
+											<div class="masters__main">
+												<div class="masters__main_speciality">СПЕЦИАЛЬНОСТЬ:</div>
+												<div class="masters__main_intro">Мастер маникюра</div>
+											</div>
+											<div class="masters__footer fic">
+												<div class="masters__footer_block">
+													<div class="masters__footer_light">СТАЖ РАБОТЫ:</div>
+													<div class="masters__footer_num">3 г. 10 мес.</div>
+												</div>
+												<button class="masters__footer_btn">Записаться</button>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							{% endfor %}
+						{% endif %}
+					{% endwith %}
 				</div>
 			</div>
 		</div>
