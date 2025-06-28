@@ -150,6 +150,24 @@
 						</div>
 					</div>
 					{% endfor %}
+
+					{% with salons_count=salons|length %}
+						{% if salons_count < 4 %}
+							{% for salon in "salons" %}
+								{% if forloop.counter0|add:salons_count < 4 %}
+									<div class="col-6 col-md-4 col-lg-4 col-xl-3 decVis">
+										<div class="salons__block">
+											<img src="img/salons/salon1.svg" alt="salon" class="salons__block_img">
+											<div class="salons__elems">
+												<div class="salons__elems_title">BeautyCity Красная</div>
+												<div class="salons__elems_light">г. Москва, ул. Красная, д. 10</div>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							{% endfor %}
+						{% endif %}
+					{% endwith %}
 				</div>
 			</div>
 		</div>
@@ -185,6 +203,24 @@
 						</div>
 					</div>
 					{% endfor %}
+
+					{% with services_count=services|length %}
+						{% if services_count < 4 %}
+							{% for service in "services" %}
+								{% if forloop.counter0|add:services_count < 4 %}
+									<div class="col-md-3 decVis">
+										<div class="cardBlock services__block">
+											<img src="img/services/service1.svg" alt="service" class="services__block_img">
+											<div class="services__elems">
+												<div class="services__elems_title">Дневной макияж</div>
+												<div class="services__elems_light">1 400 ₽</div>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							{% endfor %}
+						{% endif %}
+					{% endwith %}
 				</div>
 			</div>
 		</div>
@@ -234,6 +270,38 @@
 						</div>
 					</div>
 					{% endfor %}
+
+					{% with masters_count=masters|length %}
+						{% if masters_count < 4 %}
+							{% for master in "masters" %}
+								{% if forloop.counter0|add:masters_count < 4 %}
+									<div class="col-md-3 decVis">
+										<div class="cardBlock masters__block">
+											<div class="masters__header fic">
+												<img src="img/masters/master1.svg" alt="master" class="masters__header_img">
+												<div class="masters__header_elmes">
+													<div class="masters__header_name">Елизавета Лапина</div>
+													<img src="img/rating.svg" alt="rating" class="masters__header_rating">
+													<div class="masters__header_reviews">24 отзыва</div>
+												</div>
+											</div>
+											<div class="masters__main">
+												<div class="masters__main_speciality">СПЕЦИАЛЬНОСТЬ:</div>
+												<div class="masters__main_intro">Мастер маникюра</div>
+											</div>
+											<div class="masters__footer fic">
+												<div class="masters__footer_block">
+													<div class="masters__footer_light">СТАЖ РАБОТЫ:</div>
+													<div class="masters__footer_num">3 г. 10 мес.</div>
+												</div>
+												<button class="masters__footer_btn">Записаться</button>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							{% endfor %}
+						{% endif %}
+					{% endwith %}
 				</div>
 			</div>
 		</div>
@@ -255,80 +323,37 @@
 				</div>
 				
 				<div class="row reviewsSlider">
+					{% for feedback in feedbacks %}
 					<div class="col-md-3">
 						<div class="reviews__block">
-							<div class="reviews__name">Светлана Г.</div>
+							<div class="reviews__name">{{ feedback.author.first_name }} {{ feedback.author.last_name|first }}.</div>
 							<img src="{% static 'img/rating.svg' %}" alt="rating" class="reviews__header_rating">
 							<div class="reviews__block_text">
-								Отличное место для красоты, очень доброжелательный и отзывчивый персонал, девочки заботливые, аккуратные и большие профессионалы. Посещаю салон с самого начала, но он не теряет своей привлекательности, как в обслуживании.
+								{{ feedback.text }}
 							</div>
-							<div class="reviews__block_date">12 ноября 2022</div>
+							<div class="reviews__block_date">{{ feedback.created_at }}</div>
 						</div>
 					</div>
-					<div class="col-md-3">
-						<div class="reviews__block">
-							<div class="reviews__name">Ольга Н.</div>
-							<img src="{% static 'img/rating.svg' %}" alt="rating" class="reviews__header_rating">
-							<div class="reviews__block_text">
-								Мне всё лень было отзыв писать, но вот "руки дошли". Несколько раз здесь стриглась, мастера звали, кажется, Катя. Все было отлично, приятная молодая женщина и по стрижке вопросов не было)
-							</div>
-							<div class="reviews__block_date">5 ноября 2022</div>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="reviews__block">
-							<div class="reviews__name">Ольга Н.</div>
-							<img src="{% static 'img/rating.svg' %}" alt="rating" class="reviews__header_rating">
-							<div class="reviews__block_text">
-								Мне всё лень было отзыв писать, но вот "руки дошли". Несколько раз здесь стриглась, мастера звали, кажется, Катя. Все было отлично, приятная молодая женщина и по стрижке вопросов не было)
-							</div>
-							<div class="reviews__block_date">5 ноября 2022</div>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="reviews__block">
-							<div class="reviews__name">Елена В.</div>
-							<img src="{% static 'img/rating.svg' %}" alt="rating" class="reviews__header_rating">
-							<div class="reviews__block_text">
-								Делала процедуру микротоки у мастера Светланы . Светлана внимательная, приветливая, ненавязчивая. Рекомендую и мастера, и процедуру. Еще делала бровки у Татьяны , я в восторге , брови просто идеально сдеданы
-							</div>
-							<div class="reviews__block_date">28 октября 2022</div>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="reviews__block">
-							<div class="reviews__name">Виктория Г.</div>
-							<img src="{% static 'img/rating.svg' %}" alt="rating" class="reviews__header_rating">
-							<div class="reviews__block_text">
-								Была на педикюре у Ольги. Очень понравилось. Все инструменты стерильные, упакованы в крафт-пакет. Для меня очень важно было. Оборудование новое.
-							</div>
-							<div class="reviews__block_date">13 октября 2022</div>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="reviews__block">
-							<div class="reviews__name">Анастасия Е.</div>
-							<img src="{% static 'img/rating.svg' %}" alt="rating" class="reviews__header_rating">
-							<div class="reviews__block_text">
-								Сегодня прокололи ушки дочке в этом салоне) Остались довольны обслуживанием и персоналом. Девочки очень приветливые и внимательные . Спасибо большое, всё понравилось)
-							</div>
-							<div class="reviews__block_date">8 октября 2022</div>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="reviews__block">
-							<div class="reviews__name">Алина Ц.</div>
-							<img src="{% static 'img/rating.svg' %}" alt="rating" class="reviews__header_rating">
-							<div class="reviews__block_text">
-								Отличный салон, сервис на самом высоком уровне, всем мастерам огромное уважение за труд, обязательно вернусь
-							</div>
-							<div class="reviews__block_date">1 октября 2022</div>
-						</div>
-					</div>
-					
-					
-					
+					{% endfor %}
 
+					{% with feedbacks_count=feedbacks|length %}
+						{% if feedbacks_count < 4 %}
+							{% for feedback in "feedbacks" %}
+								{% if forloop.counter0|add:feedbacks_count < 4 %}
+									<div class="col-md-3 decVis">
+										<div class="reviews__block">
+											<div class="reviews__name">Светлана Г.</div>
+											<img src="img/rating.svg" alt="rating" class="reviews__header_rating">
+											<div class="reviews__block_text">
+												Отличное место для красоты, очень доброжелательный и отзывчивый персонал, девочки заботливые, аккуратные и большие профессионалы. Посещаю салон с самого начала, но он не теряет своей привлекательности, как в обслуживании.
+											</div>
+											<div class="reviews__block_date">12 ноября 2022</div>
+										</div>
+									</div>
+								{% endif %}
+							{% endfor %}
+						{% endif %}
+					{% endwith %}
 				</div>
 			</div>
 		</div>
