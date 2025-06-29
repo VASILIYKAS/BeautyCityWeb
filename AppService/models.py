@@ -60,21 +60,17 @@ class Salon(models.Model):
 
 class Service(models.Model):
 	SERVICES = [
-		('hair_coloring', 'окрашивание волос'),
-		('hair_styling', 'укладка волос'),
-		('manicure_сlassic', 'Маникюр классический'),
-		('pedicure', 'педикюр'),
-		('nail_extensions', 'наращивание ногтей'),
-		('daytime_makeup', 'дневной макияж'),
-		('wedding_makeup', 'свадебный макияж'),
-		('evening_makeup', 'вечерний макияж'),
+		('hairdressing_services', 'Парикмахерские услуги'),
+		('nail_service', 'Ногтевой сервис'),
+		('makeup', 'Макияж')
 	]
 
-	name = models.CharField(
+	group_services = models.CharField(
 		choices=SERVICES,
 		max_length=100,
-		verbose_name='Услуга',
+		verbose_name='Группа услуг',
 	)
+	name = models.CharField(max_length=100, verbose_name='Услуга')
 	price = models.DecimalField(
 		max_digits=10,
 		decimal_places=2,
@@ -87,13 +83,15 @@ class Service(models.Model):
 		blank=True,
 		verbose_name='Фото салона',
 	)
+	update_service = models.DateField(auto_now=True, verbose_name='Последнее обновление')
+	created_at = models.DateField(auto_now_add=True, verbose_name='Дата создания услуги')
 
 	class Meta:
 		verbose_name = 'Услугу'
 		verbose_name_plural = 'Услуги'
 
 	def __str__(self):
-		return self.get_name_display()
+		return f'{self.name}'
 
 
 class Appointment(models.Model):

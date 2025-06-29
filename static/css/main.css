@@ -461,6 +461,8 @@ color: #F6A912;
 	    justify-content: space-between;
 }
 .reviews__block {
+	width: 100%;
+    height: 200px;
 	background: #FFFFFF;
 /* тень */
 
