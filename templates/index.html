@@ -365,21 +365,42 @@
 				<div class="title contacts__title">Контакты</div>
 				<div class="row">
 					<div class="col-md-12 col-lg-4 col-xl-3">
-						<form action="#" class="contacts__form">
+						<form action="" method="post" class="contacts__form">
+							{% csrf_token %}
 							<div class="contacts__form_title">Оставьте заявку на консультацию</div>
-							<div class="contacts__form_block">
-								<input type="text" name="fname" class="contacts__form_iunput" placeholder="Введите имя" required>
-								<div class="contacts__form_inputBlock">
-									<input type="text" name="tel" class="contacts__form_iunput" placeholder="+7(999)999--99-99" required>
-								</div>
-							</div>
-							
-							<textarea name="contactsTextarea" class="contacts__form_textarea" placeholder="Вопрос(необязательно)"></textarea>
-							<div class="contacts__form_checkboxBlock fic">
-								<input type="checkbox" class="contacts__form_checkbox" checked>
-								<span class="contacts__form_checkboxBlock__intro">Я согласен(а) с политикой конфидециоальности</span>
-							</div>
-							<button type="submit" class="contacts__form_btn">Отправить</button>
+						   <div class="form-group">
+							   {{ consultation_form.name.errors }}
+							   <input type="text" name="{{ consultation_form.name.name }}" class="contacts__form_iunput" placeholder="Введите имя" required
+									  value="{{  consultation_form.name.value|default_if_none:'' }}">
+						   </div>
+
+						   <div class="contacts__form_block">
+							   <div class="contacts__form_inputBlock">
+								   {{ consultation_form.phone.errors  }}
+								   <input type="text" name="{{ consultation_form.phone.name  }}" class="contacts__form_iunput" placeholder="+7(999)999-99-99" required
+										  value="{{ fconsultation_form.phone.value|default_if_none:'' }}">
+							   </div>
+						   </div>
+						   <div class="form-group">
+							   {{ consultation_form.question.errors }}
+							   <textarea name="{{ consultation_form.question.name }}" class="contacts__form_textarea" placeholder="Вопрос(необязательно)">{{ form.question.value|default_if_none:'' }}</textarea>
+						   </div>
+						   {% if consultation_form.non_field_errors %}
+							   <div style="color: red;">
+								   {% for error in consultation_form.non_field_errors %}
+									   <p>{{ error }}</p>
+								   {% endfor %}
+							   </div>
+						   {% endif %}
+						   <div class="contacts__form_checkboxBlock fic">
+							  <input type="checkbox" class="contacts__form_checkbox" checked>
+							  <span class="contacts__form_checkboxBlock__intro">Я согласен(а) с политикой конфиденциальности</span>
+						   </div>
+
+						   <button type="submit" class="contacts__form_btn">Отправить</button>
+						   {% if consultation_success %}
+							   <p style="color: green; margin-top: 10px;">Ваша заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.</p>
+						   {% endif %}
 						</form>
 					</div>
 					<div class="col-md-12 col-lg-3">
