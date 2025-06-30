@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.http import JsonResponse
+import json
 
 from .models import Salon, Service, Master
 
@@ -22,10 +24,12 @@ def get_groups_services():
 
 def page_service(request):
 	salons = Salon.objects.all()
+	masters = Master.objects.all()
 
 	context = {
 		'salons': salons,
-		'services': get_groups_services()
+		'services': get_groups_services(),
+		'masters': masters,
 	}
 
 	return render(request, 'service.html', {'context': context})
