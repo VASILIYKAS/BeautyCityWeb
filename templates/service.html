@@ -148,7 +148,21 @@
 					<div class="service__form_block service__masters">
 						<button class="accordion">(Выберите мастера)</button>
 						<div class="panel">
-						  
+
+							{% for master in context.masters %}
+								<div class="accordion__block fic">
+						  			<div class="accordion__block_elems fic">
+										{% if master.image %}
+											<img src="{{ master.image.url }}" alt="avatar" class="accordion__block_img">
+										{% else %}
+											<img src="#" alt="avatar" class="accordion__block_img">
+										{% endif %}
+										<div class="accordion__block_master">{{ master.first_name }} {{ master.last_name }}</div>
+						  			</div>
+						  			<div class="accordion__block_prof">{{ master.speciality }}</div>
+						  		</div>
+							{% endfor %}
+
 						</div>
 						  
 						

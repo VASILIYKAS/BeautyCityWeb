@@ -4,42 +4,6 @@ from django.db import models
 from AppHome.models import Client
 
 
-class Master(models.Model):
-	CHOICE_SPECIALIZATION = [
-		('stylist', 'стилист'),
-		('make-up', 'визажист'),
-		('manicurist', 'мастер маникюра'),
-		('barber', 'парикмахер'),
-	]
-
-	first_name = models.CharField(max_length=100, verbose_name='Имя')
-	last_name = models.CharField(max_length=100, verbose_name='Фамилия')
-	speciality = models.CharField(
-		choices=CHOICE_SPECIALIZATION,
-		max_length=20,
-		verbose_name='Специальность',
-	)
-	experience_years = models.PositiveIntegerField(default=0, verbose_name='Стаж лет')
-	experience_monts = models.PositiveIntegerField(
-		default=0,
-		validators=[MaxValueValidator(11)],
-		verbose_name='Стаж месяцев',
-	)
-	image = models.ImageField(
-		upload_to='masters_photos/',
-		null=True,
-		blank=True,
-		verbose_name='Фото мастера',
-	)
-
-	class Meta:
-		verbose_name = 'Мастера'
-		verbose_name_plural = 'Мастера'
-
-	def __str__(self):
-		return f'{self.first_name} {self.last_name} ({self.get_speciality_display()})'
-
-
 class Salon(models.Model):
 	name = models.CharField(max_length=100, verbose_name='Название салона')
 	address = models.CharField(max_length=200, verbose_name='Адрес салона')
@@ -56,6 +20,50 @@ class Salon(models.Model):
 
 	def __str__(self):
 		return f'{self.name}'
+
+
+class Master(models.Model):
+	CHOICE_SPECIALIZATION = [
+		('stylist', 'стилист'),
+		('make-up', 'визажист'),
+		('manicurist', 'мастер маникюра'),
+		('barber', 'парикмахер'),
+	]
+
+	first_name = models.CharField(max_length=100, verbose_name='Имя')
+	last_name = models.CharField(max_length=100, verbose_name='Фамилия')
+	speciality = models.CharField(
+		choices=CHOICE_SPECIALIZATION,
+		max_length=20,
+		verbose_name='Специальность',
+	)
+	experience_years = models.PositiveIntegerField(default=0, verbose_name='Стаж лет')
+	experience_months = models.PositiveIntegerField(
+		default=0,
+		validators=[MaxValueValidator(11)],
+		verbose_name='Стаж месяцев',
+	)
+	image = models.ImageField(
+		upload_to='masters_photos/',
+		null=True,
+		blank=True,
+		verbose_name='Фото мастера',
+	)
+	salon = models.ForeignKey(
+		Salon,
+		on_delete=models.SET_NULL,
+		null=True,
+		blank=True,
+		related_name='masters',
+		verbose_name='Салон',
+	)
+
+	class Meta:
+		verbose_name = 'Мастера'
+		verbose_name_plural = 'Мастера'
+
+	def __str__(self):
+		return f'{self.first_name} {self.last_name} ({self.get_speciality_display()})'
 
 
 class Service(models.Model):
