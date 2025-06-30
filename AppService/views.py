@@ -23,13 +23,13 @@ def get_groups_services():
 
 
 def page_service(request):
-	salons = Salon.objects.all()
-	masters = Master.objects.all()
+    salons = Salon.objects.all()
+    masters = Master.objects.all()
 
-	context = {
-		'salons': salons,
-		'services': get_groups_services(),
-		'masters': masters,
-	}
+    context = {
+        'salons': salons,
+        'services': get_groups_services(),
+        'masters': masters,
+    }
 
     return render(request, 'service.html', {'context': context})
