@@ -22,14 +22,34 @@ def get_groups_services():
 	return grouped_services
 
 
+def receive_salon_name(request):
+	if request.method == 'POST':
+		data = json.loads(request.body)
+		salon_name = data.get('name')
+		request.session['selected_salon'] = salon_name
+		print(salon_name)
+
+		return JsonResponse({'status': 'ok'})
+
+	return JsonResponse({'error': 'invalid request'}, status=400)
+
+
 def page_service(request):
+	if 'selected_salon' not in request.session:
+		request.session['selected_salon'] = None
+
 	salons = Salon.objects.all()
-	masters = Master.objects.all()
+	selected_salon_name = request.session.get('selected_salon')
+	masters = Master.objects.none()
+
+	if selected_salon_name:
+		selected_salon = Salon.objects.get(name=selected_salon_name)
+		masters = Master.objects.filter(salon=selected_salon)
 
 	context = {
 		'salons': salons,
 		'services': get_groups_services(),
 		'masters': masters,
 	}
-
+	print(selected_salon_name)
 	return render(request, 'service.html', {'context': context})
