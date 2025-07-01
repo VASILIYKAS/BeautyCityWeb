@@ -57,7 +57,7 @@ class Feedback(models.Model):
 
 
 class Consultation(models.Model):
-	STAUS = [
+	STATUS = [
 		('new', 'новая'),
 		('work', 'в работе'),
 		('completed', 'завершена')
@@ -74,7 +74,7 @@ class Consultation(models.Model):
 		blank=True,
 		verbose_name='Вопрос')
 	status = models.CharField(
-		choices=STAUS,
+		choices=STATUS,
 		default='new',
 		max_length=10,
 		verbose_name='Статус заявки'
