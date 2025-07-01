@@ -27,7 +27,6 @@ def receive_salon_name(request):
 		data = json.loads(request.body)
 		salon_name = data.get('name')
 		request.session['selected_salon'] = salon_name
-		print(salon_name)
 
 		return JsonResponse({'status': 'ok'})
 
@@ -35,9 +34,6 @@ def receive_salon_name(request):
 
 
 def page_service(request):
-	if 'selected_salon' not in request.session:
-		request.session['selected_salon'] = None
-
 	salons = Salon.objects.all()
 	selected_salon_name = request.session.get('selected_salon')
 	masters = Master.objects.none()
@@ -51,5 +47,5 @@ def page_service(request):
 		'services': get_groups_services(),
 		'masters': masters,
 	}
-	print(selected_salon_name)
+
 	return render(request, 'service.html', {'context': context})
