@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
 
 from .models import Client
+from AppService.models import ConsultationRequest
 
 
 class ClientRegistrationForm(forms.Form):
@@ -64,3 +65,18 @@ class ClientRegistrationForm(forms.Form):
                 phone=self.cleaned_data['phone']
             )
         return user
+
+class ConsultationRequestForm(forms.ModelForm):
+    class Meta:
+        model = ConsultationRequest
+        fields = ['name', 'phone', 'question']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Введите имя', 'required': 'required'}),
+            'phone': forms.TextInput(attrs={'placeholder': '+7(999)999-99-99', 'required': 'required'}),
+            'question': forms.Textarea(attrs={'placeholder': 'Вопрос (необязательно)'}),
+        }
+        labels = {
+            'name': '',
+            'phone': '',
+            'question': '',
+        }

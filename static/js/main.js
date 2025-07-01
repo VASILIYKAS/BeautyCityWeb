@@ -1,4 +1,38 @@
 $(document).ready(function() {
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(name + "=")) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function sendSalonNameToServer(salonName) {
+    fetch("/api/send-salon/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        body: JSON.stringify({ name: salonName })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.masters_html) {
+            document.querySelector(".service__masters > .panel").innerHTML = data.masters_html;
+        }
+    })
+    .catch(error => console.error("Ошибка при отправке:", error));
+}
+
 	$('.salonsSlider').slick({
 		arrows: true,
 	  slidesToShow: 4,
@@ -204,6 +238,7 @@ $(document).ready(function() {
 //			// $('.service__masters div[data-masters="Pushkinskaya"]').addClass('vib')
 //		}
 		console.log(thisName)
+		sendSalonNameToServer(thisName)
 
 //		if(thisName === 'BeautyCity Ленина') {
 //

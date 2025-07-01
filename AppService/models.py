@@ -1,5 +1,6 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
 
 from AppHome.models import Client
 
@@ -184,5 +185,21 @@ class Appointment(models.Model):
         verbose_name = 'Запись'
         verbose_name_plural = 'Записи'
 
-    def __str__(self):
-        return f'Запись №{self.id}'
+
+	def __str__(self):
+		return f'Запись №{self.id}'
+
+
+class ConsultationRequest(models.Model):
+	name = models.CharField(max_length=100, verbose_name="Имя")
+	phone = PhoneNumberField(verbose_name="Телефон")
+	question = models.TextField(blank=True, null=True, verbose_name="Вопрос")
+	submitted_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата заявки")
+
+	class Meta:
+		verbose_name = "Заявка на консультацию"
+		verbose_name_plural = "Заявки на консультацию"
+		ordering = ['-submitted_at']
+
+	def __str__(self):
+		return f"Заявка от {self.name} ({self.phone}) - {self.submitted_at.strftime('%Y-%m-%d %H:%M')}"
