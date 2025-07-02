@@ -159,8 +159,6 @@ function sendSalonNameToServer(salonName) {
 		$('#mobMenu').hide()
 	})
 
-	new AirDatepicker('#datepickerHere')
-
 	var acc = document.getElementsByClassName("accordion");
 	var i;
 
@@ -436,19 +434,73 @@ function sendSalonNameToServer(salonName) {
 	})
 
 	//service
-	$('.time__items .time__elems_elem .time__elems_btn').click(function(e) {
-		e.preventDefault()
-		$('.time__elems_btn').removeClass('active')
-		$(this).addClass('active')
-		// $(this).hasClass('active') ? $(this).removeClass('active') : $(this).addClass('active')
-	})
+    // Инициализация datepicker
+const datepickerInstance = new AirDatepicker('#datepickerHere', {
+        dateFormat: 'yyyy-MM-dd',
+        minDate: new Date(),
+        onSelect: function({ date }) {
+            updateHiddenDateField(date);
+            const activeTimeBtn = $('.time__elems_btn.active');
+            if (activeTimeBtn.length) {
+                updateHiddenTimeField(activeTimeBtn.data('time'));
+            }
+        }
+    });
 
-	$(document).on('click', '.servicePage', function() {
-		if($('.time__items .time__elems_elem .time__elems_btn').hasClass('active') && $('.service__form_block > button').hasClass('selected')) {
-			$('.time__btns_next').addClass('active')
-		}
-	})
-	
+    // Обработчик для кнопок времени
+    $(document).on('click', '.time__elems_btn', function(e) {
+        e.preventDefault();
+        const selectedDate = datepickerInstance.selectedDates[0];
+        if (!selectedDate) {
+            alert('Пожалуйста, сначала выберите дату');
+            return;
+        }
+        $('.time__elems_btn').removeClass('active');
+        $(this).addClass('active');
+        updateHiddenDateField(selectedDate);
+        updateHiddenTimeField($(this).data('time'));
+    });
 
+    // Функции для обновления скрытых полей
+    function updateHiddenDateField(date) {
+        $('input[name="selected_date"]').remove();
+        if (date) {
+            const dateStr = formatDate(date);
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'selected_date',
+                value: dateStr
+            }).appendTo('.service__form');
+        }
+    }
 
+    function updateHiddenTimeField(time) {
+        $('input[name="selected_time"]').remove();
+        if (time) {
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'selected_time',
+                value: time
+            }).appendTo('.service__form');
+        }
+    }
+
+    // Форматирование даты
+    function formatDate(date) {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    // Проверка перед отправкой формы
+    $('.service__form').on('submit', function(e) {
+        const selectedDate = datepickerInstance.selectedDates[0];
+        const selectedTime = $('.time__elems_btn.active').data('time');
+        if (!selectedDate || !selectedTime) {
+            e.preventDefault();
+            alert('Пожалуйста, выберите дату и время');
+        }
+    });
 })

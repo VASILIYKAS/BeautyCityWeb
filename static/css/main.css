@@ -31,6 +31,7 @@ color: #323232;
 
 opacity: 0.3;
 }
+
 .container {
 	max-width: 1211px;
 	width: 100%;
@@ -1146,6 +1147,11 @@ opacity: 0.3;
 	display: none;
 }
 
+.col-md-12 {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
 .time__btns_next {
 	font-weight: 600;
 font-size: 18px;
@@ -1156,7 +1162,6 @@ line-height: 127.52%;
 /* Серый текст */
 background: #EBEBEB;
 border-radius: 5px;
-margin-right: 14px;
 color: #B0B0B0;
 width: 116px;
 height: 53px;

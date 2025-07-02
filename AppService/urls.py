@@ -1,9 +1,20 @@
 from django.urls import path
 
-from . import views
+from AppService.views import (
+    fetch_salon,
+    fetch_master,
+    fetch_service,
+    fetch_datetime,
+    confirm_service,
+    add_appointment
+)
 
 
 urlpatterns = [
-    path('service/', views.page_service, name='service'),
-    path('api/send-salon/', views.receive_salon_name, name='send_salon'),
+    path('service/', fetch_salon, name='service_salon'),
+    path('service/service/', fetch_service, name='service_service'),
+    path('service/master/', fetch_master, name='service_master'),
+    path('service/datetime/', fetch_datetime, name='service_datetime'),
+    path('service/confirm/', confirm_service, name='confirm_service'),
+    path('service/add/', add_appointment, name='add_appointment'),
 ]
