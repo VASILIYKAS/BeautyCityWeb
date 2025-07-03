@@ -205,7 +205,7 @@
 							<img src="{% static 'img/salons/default.png' %}" alt="service" class="services__block_img">
 							{% endif %}
 							<div class="services__elems">
-								<div class="services__elems_title">{{ service.get_name_display }}</div>
+								<div class="services__elems_title">{{ service.name }}</div>
 								<div class="services__elems_light">{{ service.price|floatformat }} ₽</div>
 							</div>
 						</div>
@@ -273,7 +273,7 @@
 									<div class="masters__footer_light">СТАЖ РАБОТЫ:</div>
 									<div class="masters__footer_num">{{master.experience_years}}г. {{master.experience_monts}} мес.</div>
 								</div>
-								<button class="masters__footer_btn">Записаться</button>
+								<button class="masters__footer_btn" onclick="window.location.href='{% url 'pick_master' master.id %}'">Записаться</button>
 							</div>
 						</div>
 					</div>

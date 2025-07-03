@@ -53,6 +53,12 @@ class Service(models.Model):
     created_at = models.DateField(
         auto_now_add=True, verbose_name='Дата создания услуги')
 
+    salons = models.ManyToManyField(
+        Salon,
+        related_name='services',
+        verbose_name='Доступно в салонах'
+    )
+
     class Meta:
         verbose_name = 'Услугу'
         verbose_name_plural = 'Услуги'

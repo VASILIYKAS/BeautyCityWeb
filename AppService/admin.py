@@ -15,10 +15,10 @@ class SalonAdmin(admin.ModelAdmin):
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-	list_display = ('name', 'price', 'group_services', 'update_service',)
+	list_display = ('name', 'price', 'group_services', 'update_service')
 	list_filter = ('group_services', 'update_service',)
 	readonly_fields = ('update_service', 'created_at',)
-
+	
 
 @admin.register(Appointment)
 class AppointmentAdmin(admin.ModelAdmin):

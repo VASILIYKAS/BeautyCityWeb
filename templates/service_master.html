@@ -113,27 +113,36 @@
 					{% csrf_token %}
 					<div class="service__form_block service__masters">
 						<button class="accordion">(Выберите мастера)</button>
-						{% if error %}
-							<div class="error" style="color: red;">{{ error }}</div>
-						{% endif %}
-						{% if masters %}
-						{% for master in masters %}
 						<div class="panel">
-							<input type="radio" name="master" value="{{ master.id }}">
-								<div class="accordion__block fic">
-						  			<div class="accordion__block_elems fic">
-										{% if master.image %}
-											<img src="{{ master.image.url }}" alt="avatar" class="masters__header_img">
-										{% else %}
-											<img src="#" alt="avatar" class="accordion__block_img">
-										{% endif %}
-										<div class="accordion__block_master">{{ master.first_name }} {{ master.last_name }}</div>
-						  			</div>
-						  			<div class="accordion__block_prof">{{ master.get_speciality_display }}</div>
-						  		</div>
-						{% endfor %}
+							{% if error %}
+								<div class="error" style="color: red;">{{ error }}</div>
+							{% endif %}
+							{% if masters %}
+								<div class="accordion__block_items">
+									{% for master in masters %}
+										<div class="accordion__block fic">
+											<label class="custom-checkbox">
+												<input type="radio" name="master" value="{{ master.id }}">
+												<span class="checkmark"></span>
+												<div class="service-info">
+													<div class="accordion__block_elems fic">
+														{% if master.image %}
+															<img src="{{ master.image.url }}" alt="avatar" class="masters__header_img">
+														{% else %}
+															<img src="#" alt="avatar" class="accordion__block_img">
+														{% endif %}
+														<div class="accordion__block_master">{{ master.first_name }} {{ master.last_name }}</div>
+													</div>
+													<div class="accordion__block_prof">{{ master.get_speciality_display }}</div>
+												</div>
+											</label>
+										</div>
+									{% endfor %}
+								</div>
+							{% else %}
+								<p></p>
+							{% endif %}
 						</div>
-						{% endif %}
 					</div>
 					<div class="container">
 						<div class="time">
@@ -219,6 +228,85 @@
 				</div>
 			</div>
 		</div>
+		<style>
+		.custom-checkbox {
+			display: flex;
+			align-items: center;
+			position: relative;
+			padding: 12px 15px;
+			margin-bottom: 8px;
+			cursor: pointer;
+			border: 1px solid #eee;
+			border-radius: 6px;
+			transition: all 0.3s;
+		}
+
+		.custom-checkbox:hover {
+			background-color: #f9f9f9;
+		}
+
+		.custom-checkbox input {
+			position: absolute;
+			opacity: 0;
+			cursor: pointer;
+		}
+
+		.checkmark {
+			position: relative;
+			height: 20px;
+			width: 20px;
+			min-width: 20px;
+			background-color: #fff;
+			border: 2px solid #ccc;
+			border-radius: 4px;
+			margin-right: 15px;
+		}
+
+		.custom-checkbox input:checked ~ .checkmark {
+			background-color: #007bff;
+			border-color: #007bff;
+		}
+
+		.checkmark:after {
+		width: 5px;
+		height: 10px;
+		border: solid white;
+		border-width: 0 2px 2px 0;
+		transform: rotate(45deg);
+		left: 8px;
+		top: 4px;
+
+		}
+
+		.custom-checkbox input:checked ~ .checkmark:after {
+			display: block;
+		}
+
+		.custom-checkbox .checkmark:after {
+			left: 6px;
+			top: 6px;
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background: white;
+		}
+
+		.service-info {
+			display: flex;
+			flex-grow: 1;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.service-name {
+			font-size: 16px;
+		}
+
+		.service-price {
+			color: #666;
+			font-weight: bold;
+		}
+		</style>
 	</footer>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

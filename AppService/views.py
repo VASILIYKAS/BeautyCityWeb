@@ -6,10 +6,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 
 
-def get_groups_services():
-    services = Service.objects.all()
-    grouped_services = {}
+def get_groups_services(request):
+    salon_id = request.session.get('selected_salon_id')
 
+    if salon_id:
+        services = Service.objects.filter(salons__id=salon_id)
+    else:
+        services = Service.objects.all()
+
+    grouped_services = {}
     for service in services:
         group_name = service.get_group_services_display()
         if group_name not in grouped_services:
@@ -25,6 +30,17 @@ def get_groups_services():
 
 
 def fetch_salon(request):
+    keys_to_clear = [
+        'selected_salon_id',
+        'selected_service_id',
+        'selected_master_id',
+        'selected_master_name',
+        'selected_salon_name'
+    ]
+    for key in keys_to_clear:
+        if key in request.session:
+            del request.session[key]
+
     if request.method == 'POST':
         salon_id = request.POST.get('salon')
         salon = Salon.objects.get(id=salon_id)
@@ -37,33 +53,61 @@ def fetch_salon(request):
 
 
 def fetch_service(request):
-    if 'selected_salon_id' not in request.session:
+    if 'selected_master_id' not in request.session and 'selected_salon_id' not in request.session:
         return redirect('service_salon')
 
     if request.method == 'POST':
-        print("POST данные:", request.POST)  # Отладочный вывод
+        print("POST данные:", request.POST)
         service_id = request.POST.get('service')
         if service_id and service_id.isdigit():
             try:
                 service = Service.objects.get(id=service_id)
+                salon_id = request.session.get('selected_salon_id')
+                if salon_id and not service.salons.filter(id=salon_id).exists():
+                    return render(request, 'service_service.html', {
+                        'services': get_groups_services(request),
+                        'error': 'Эта услуга недоступна в выбранном салоне.'
+                    })
+
                 request.session['selected_service_id'] = service_id
                 print(f"Выбрана услуга: {service.name}, price: {service.price}")
-                return redirect('service_master')
+
+                if 'selected_master_id' in request.session:
+                    master = Master.objects.get(id=request.session['selected_master_id'])
+                    if not master.services.filter(id=service_id).exists():
+                        del request.session['selected_master_id']
+                        return redirect('service_master')
+                    return redirect('service_datetime')
+                else:
+                    return redirect('service_master')
+
             except Service.DoesNotExist:
                 return render(request, 'service_service.html', {
-                    'services': get_groups_services(),
+                    'services': get_groups_services(request),
                     'error': 'Выбранная услуга не найдена.'
                 })
         else:
-            print("Ошибка: service_id пустой или невалидный:", service_id)  # Отладочный вывод
+            print("Ошибка: service_id пустой или невалидный:", service_id)
             return render(request, 'service_service.html', {
-                'services': get_groups_services(),
+                'services': get_groups_services(request),
                 'error': 'Пожалуйста, выберите услугу.'
             })
 
-    return render(request, 'service_service.html', {
-        'services': get_groups_services(),
-    })
+    if 'selected_master_id' in request.session:
+        master = Master.objects.get(id=request.session['selected_master_id'])
+        salon_id = request.session.get('selected_salon_id')
+        if salon_id:
+            services = master.services.filter(salons__id=salon_id)
+        else:
+            services = master.services.all()
+        return render(request, 'service_service.html', {
+            'services': services,
+            'master_selected': True
+        })
+    else:
+        return render(request, 'service_service.html', {
+            'services': get_groups_services(request),
+        })
 
 
 def fetch_master(request):
@@ -99,6 +143,8 @@ def fetch_master(request):
     ).distinct()
 
     if not masters.exists():
+        if 'selected_master_id' in request.session:
+            del request.session['selected_master_id']
         return render(request, 'service_master.html', {
             'masters': [],
             'error': 'Нет мастеров, предоставляющих выбранную услугу в этом салоне.'
@@ -122,11 +168,9 @@ def fetch_datetime(request):
             })
 
         try:
-            # Собираем полную дату и время
             datetime_str = f"{selected_date} {selected_time}"
             selected_datetime = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M')
 
-            # Сохраняем в сессии
             request.session['selected_datetime'] = datetime_str
 
             return redirect('confirm_service')
@@ -139,8 +183,24 @@ def fetch_datetime(request):
     return render(request, 'service_datetime.html')
 
 
+def pick_master(request, master_id):
+    try:
+        master = Master.objects.get(id=master_id)
+        request.session['selected_master_id'] = master.id
+        request.session['selected_master_name'] = f"{master.first_name} {master.last_name}"
+        request.session['selected_salon_id'] = master.salon.id
+        request.session['selected_salon_name'] = master.salon.name
+
+        if 'selected_service_id' in request.session:
+            del request.session['selected_service_id']
+        return redirect('service_service')
+
+    except Master.DoesNotExist:
+        messages.error(request, 'Мастер не найден')
+        return redirect('home')
+
+
 def confirm_service(request):
-    # Проверяем данные в сессии
     required_keys = [
         'selected_salon_id',
         'selected_service_id',
@@ -153,7 +213,6 @@ def confirm_service(request):
         print(f"Missing keys in session: {missing_keys}")
         return redirect('service_salon')
 
-    # Извлекаем данные из сессии
     salon_id = request.session['selected_salon_id']
     service_id = request.session['selected_service_id']
     master_id = request.session['selected_master_id']
@@ -163,7 +222,6 @@ def confirm_service(request):
     date = selected_datetime.date()
     time = selected_datetime.strftime('%H:%M')
 
-    # Получаем объекты из базы данных
     salon = Salon.objects.get(id=int(salon_id))
     service = Service.objects.get(id=int(service_id))
     master = Master.objects.get(id=int(master_id))
@@ -179,44 +237,35 @@ def confirm_service(request):
 
 def add_appointment(request):
     if request.method == 'POST':
-        # Данные формы
         first_name = request.POST.get('first_name')
         phone = request.POST.get('phone')
         contactsTextarea = request.POST.get('contactsTextarea')
 
-        # Проверка обязательных полей
         if not first_name or not phone:
             messages.error(request, 'Пожалуйста, заполните имя и номер телефона.')
             return redirect('confirm_service')
 
-        # Получаем сессионные данные
         salon_id = request.session.get('selected_salon_id')
         service_id = request.session.get('selected_service_id')
         master_id = request.session.get('selected_master_id')
         datetime_str = request.session.get('selected_datetime')
 
-        # Преобразование строки в дату и время
         selected_datetime = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M')
         date = selected_datetime.date()
         time = selected_datetime.time().strftime('%H:%M')
 
-        # Получаем объекты из базы данных
         salon = Salon.objects.get(id=int(salon_id))
         service = Service.objects.get(id=int(service_id))
         master = Master.objects.get(id=int(master_id))
 
-        # Проверка занятости слота
         if Appointment.get_slot_employment(master, date, time):
             messages.error(request, 'Данный временной слот уже занят. Выберите другое время.')
             return redirect('confirm_service')
 
-        # Создание клиента (либо берём существующего)
         client, created = Client.objects.get_or_create(first_name=first_name, phone=phone)
 
-        # Цена услуги
         price = service.price
 
-        # Создаём запись в БД
         appointment = Appointment.objects.create(
             client=client,
             salon=salon,
@@ -228,13 +277,11 @@ def add_appointment(request):
             status='not_paid',
         )
 
-        # Чистка сессионных данных
         del request.session['selected_salon_id']
         del request.session['selected_service_id']
         del request.session['selected_master_id']
         del request.session['selected_datetime']
 
-        # Сообщаем пользователю о успешном создании записи
         messages.success(request, 'Ваше бронирование успешно создано!')
         return redirect('home')
 

@@ -115,20 +115,40 @@
 					<div class="service__form_block service__services">
 						<button class="accordion">(Выберите услугу)</button>
 						<div class="panel">
-							{% for group_name, services in services.items %}
-								<button class="accordion">{{ group_name }}</button>
-								<div class="panel">
-									<div class="accordion__block_items">
-										{% for service in services %}
-											<div class="accordion__block_item fic">
+							{% if master_selected %}
+								<div class="accordion__block_items">
+									{% for service in services %}
+										<div class="accordion__block fic">
+											<label class="custom-checkbox">
 												<input type="radio" name="service" value="{{ service.id }}"> 
+												<span class="checkmark"></span>
 												<div class="accordion__block_item_intro">{{ service.name }}</div>
 												<div class="accordion__block_item_address">{{ service.price }} ₽</div>
-											</div>
-										{% endfor %}
-									</div>
+											</label>
+										</div>
+									{% empty %}
+										<p>Нет доступных услуг для этого мастера</p>
+									{% endfor %}
 								</div>
-							{% endfor %}
+							{% else %}
+								{% for group_name, services in services.items %}
+									<button class="accordion">{{ group_name }}</button>
+									<div class="panel">
+										<div class="accordion__block_items">
+											{% for service in services %}
+												<div class="accordion__block fic">
+													<label class="custom-checkbox">
+														<input type="radio" name="service" value="{{ service.id }}"> 
+														<span class="checkmark"></span>
+														<div class="accordion__block_item_intro">{{ service.name }}</div>
+														<div class="accordion__block_item_address">{{ service.price }} ₽</div>
+													</label>
+												</div>
+											{% endfor %}
+										</div>
+									</div>
+								{% endfor %}
+							{% endif %}
 						</div>
 					</div>
 					<div class="container">
@@ -219,6 +239,85 @@
 				</div>
 			</div>
 		</div>
+		<style>
+		.custom-checkbox {
+			display: flex;
+			align-items: center;
+			position: relative;
+			padding: 12px 15px;
+			margin-bottom: 8px;
+			cursor: pointer;
+			border: 1px solid #eee;
+			border-radius: 6px;
+			transition: all 0.3s;
+		}
+
+		.custom-checkbox:hover {
+			background-color: #f9f9f9;
+		}
+
+		.custom-checkbox input {
+			position: absolute;
+			opacity: 0;
+			cursor: pointer;
+		}
+
+		.checkmark {
+			position: relative;
+			height: 20px;
+			width: 20px;
+			min-width: 20px;
+			background-color: #fff;
+			border: 2px solid #ccc;
+			border-radius: 4px;
+			margin-right: 15px;
+		}
+
+		.custom-checkbox input:checked ~ .checkmark {
+			background-color: #007bff;
+			border-color: #007bff;
+		}
+
+		.checkmark:after {
+		width: 5px;
+		height: 10px;
+		border: solid white;
+		border-width: 0 2px 2px 0;
+		transform: rotate(45deg);
+		left: 8px;
+		top: 4px;
+
+		}
+
+		.custom-checkbox input:checked ~ .checkmark:after {
+			display: block;
+		}
+
+		.custom-checkbox .checkmark:after {
+			left: 6px;
+			top: 6px;
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background: white;
+		}
+
+		.service-info {
+			display: flex;
+			flex-grow: 1;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.service-name {
+			font-size: 16px;
+		}
+
+		.service-price {
+			color: #666;
+			font-weight: bold;
+		}
+		</style>
 	</footer>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
